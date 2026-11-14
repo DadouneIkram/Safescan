@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz</title>
+<style>
+  :root {
+    --alarm: #c4161c;
+    --alarm-dark: #7d0a0f;
+    --night: #0a0d14;
+    --panel: #141a2b;
+    --mint: #34f59a;
+    --text: #f5f7fb;
+    --muted: #9aa3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--alarm);
+    overflow-x: hidden;
+  }
+
+  /* ---------- Screen 1: the fake alert ---------- */
+  #alert {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px 24px;
+    background: radial-gradient(circle at 50% 40%, var(--alarm) 0%, var(--alarm-dark) 100%);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  #alert .icon { font-size: 84px; line-height: 1; margin-bottom: 20px; }
+  #alert h1 { font-size: clamp(30px, 8vw, 46px); line-height: 1.1; margin-bottom: 14px; }
+  #alert p { font-size: 18px; max-width: 28ch; line-height: 1.4; opacity: .95; }
+  @keyframes pulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(.82); }
+  }
+
+  /* ---------- Screen 2: the reveal ---------- */
+  #reveal {
+    display: none;
+    min-height: 100%;
+    background: var(--night);
+    padding: 40px 24px 48px;
+  }
+  .wrap { max-width: 460px; margin: 0 auto; }
+  .badge {
+    width: 72px; height: 72px; border-radius: 50%;
+    border: 2px solid var(--mint);
+    background: #123a32;
+    display: grid; place-items: center;
+    font-size: 36px; color: var(--mint);
+    margin-bottom: 22px;
+  }
+  #reveal h2 { font-size: 30px; line-height: 1.15; margin-bottom: 10px; }
+  #reveal .lead { color: var(--muted); font-size: 17px; line-height: 1.5; margin-bottom: 26px; }
+  .tips {
+    list-style: none;
+    background: var(--panel);
+    border: 1px solid #252d45;
+    border-radius: 14px;
+    padding: 6px 18px;
+    margin-bottom: 26px;
+  }
+  .tips li { padding: 14px 0; border-bottom: 1px solid #252d45; line-height: 1.45; }
+  .tips li:last-child { border-bottom: 0; }
+  .tips b { color: var(--mint); }
+  .foot { color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+  body.revealed { background: var(--night); }
+  body.revealed #alert { display: none; }
+  body.revealed #reveal { display: block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #alert { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<main id="alert" role="alert">
+  <div class="icon" aria-hidden="true">&#9888;</div>
+  <h1>Your phone has been hacked</h1>
+  <p>Your data is being copied. Do not close this page.</p>
+</main>
+
+<main id="reveal">
+  <div class="wrap">
+    <div class="badge" aria-hidden="true">&#10003;</div>
+    <h2>This was a demo. Your phone is safe.</h2>
+    <p class="lead">Nothing was installed and no data was collected. But you scanned a code you had no way to check, and that is exactly how a real scam works.</p>
+    <ul class="tips">
+      <li><b>Look at the link first.</b> Read the full address before you open it.</li>
+      <li><b>Check the sticker.</b> Is it stuck on top of another code?</li>
+      <li><b>Never enter card details</b> on a page you reached from a code you cannot verify.</li>
+    </ul>
+    <p class="foot">Scan Before You Trust &middot; SafeScan project &middot; Thynk Unlimited</p>
+  </div>
+</main>
+
+<script>
+  // The alert stays for 6 seconds (or until the person taps), then the reveal appears.
+  var shown = false;
+  function reveal() {
+    if (shown) return;
+    shown = true;
+    document.body.classList.add("revealed");
+    window.scrollTo(0, 0);
+  }
+  setTimeout(reveal, 6000);
+  document.getElementById("alert").addEventListener("click", reveal);
+</script>
+</body>
+</html>
